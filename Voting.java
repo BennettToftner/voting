@@ -20,6 +20,21 @@ public class Voting {
 		}
 		return index;
 	}
+
+	private static int smallIndex(int[] arr)
+	{
+		int index = 0;
+		int smallest = Integer.MAX_VALUE;
+		for (int i = 0; i < arr.length; i++)
+		{
+			if (arr[i] < smallest && arr[i] != -1)
+			{
+				smallest = arr[i];
+				index = i;
+			}
+		}
+		return index;
+	}
 	
 	//move to voter class?
 	public static Candidate favoriteCandidate(Voter v, List<Candidate> cList)
@@ -143,6 +158,45 @@ public class Voting {
 			cList.remove(favCandidate);
 		}
 		return ranking;
+	}
+
+	public static Candidate instantRunoff(List<Voter> vList, List<Candidate> cList)
+	{
+		List<List<Candidate>> rankings = new ArrayList<List<Candidate>>();
+		for (Voter v: vList)
+		{
+			List<Candidate> cListCopy = new ArrayList<Candidate>();
+			for (int i = 0; i < cList.size(); i++)
+			{
+				cListCopy.add(cList.get(i));
+			}
+			rankings.add(generateRanking(v, cListCopy));
+		}
+		int[] votes = new int[cList.size()];
+		for (List<Candidate> ranking: rankings)
+		{
+			votes[cList.indexOf(ranking.get(0))] += 1;
+		}
+		while (votes[bigIndex(votes)] <= vList.size() / 2)
+		{
+			//runoff
+			int smallIndex = smallIndex(votes);
+			Candidate leastFav = cList.get(smallIndex);
+			votes[smallIndex] = -1;
+			for (List<Candidate> ranking: rankings)
+			{
+				if (ranking.get(0).equals(leastFav))
+				{
+					votes[cList.indexOf(ranking.get(1))]++;
+				}
+			}
+		}
+		int bigIndex = bigIndex(votes);
+		for (int i = 0; i < cList.size(); i++)
+		{
+			cList.get(i).setVotes(votes[i]);
+		}
+		return cList.get(bigIndex);
 	}
 	
 	public static Candidate condorcet(List<Voter> vList, List<Candidate> cList)
