@@ -1,3 +1,4 @@
+package voting;
 
 public class Voter {
 	//[-10, 10]

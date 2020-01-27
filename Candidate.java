@@ -1,3 +1,4 @@
+package voting;
 
 public class Candidate {
 	private double economicPlatform;
