@@ -8,7 +8,8 @@ public class Main {
 	public static void main(String[] args) {
 		
 		List<Voter> voters = Voting.generateVoterCircles(1000, 5, 2, 0, 0);
-		System.out.println(Voting.graphVoters(voters, 1.5));
+		System.out.println(Voting.graphVoters(voters, 1));
+		System.out.println(voters.size());
 		
 		ArrayList<Candidate> candidates = new ArrayList<Candidate>();
 		candidates.add(new Candidate("Left leaning candidate", -5, -5));

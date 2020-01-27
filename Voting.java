@@ -83,6 +83,16 @@ public class Voting {
 		}
 		return result;
 	}
+
+	public static List<Voter> generateRandomVoters(int numVoters)
+	{
+		ArrayList<Voter> voters = new ArrayList<Voter>();
+		for (int i = 0; i < numVoters; i++)
+		{
+			voters.add(new Voter());
+		}
+		return voters;
+	}
 	
 	/**
 	 * Generates concentric circles of voters decreasing in amount as the circles expand.
