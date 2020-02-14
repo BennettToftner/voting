@@ -27,7 +27,7 @@ public class Voting {
 		int smallest = Integer.MAX_VALUE;
 		for (int i = 0; i < arr.length; i++)
 		{
-			if (arr[i] < smallest && arr[i] != -1)
+			if (arr[i] < smallest && arr[i] >= 0)
 			{
 				smallest = arr[i];
 				index = i;
@@ -109,6 +109,16 @@ public class Voting {
 		return voters;
 	}
 	
+	public static List<Candidate> generateRandomCandidates(int numCands)
+	{
+		ArrayList<Candidate> cands = new ArrayList<Candidate>();
+		for (int i = 0; i < numCands; i++)
+		{
+			cands.add(new Candidate("Candidate " + (i + 1)));
+		}
+		return cands;
+	}
+	
 	/**
 	 * Generates concentric circles of voters decreasing in amount as the circles expand.
 	 * Results in a square of voters around the edge if voters go above 10 or below -10 in economic or social beliefs.
@@ -159,44 +169,68 @@ public class Voting {
 		}
 		return ranking;
 	}
+	
+	private static <T> List<T> copyList(List<T> l)
+	{
+		List<T> listCopy = new ArrayList<T>();
+		for (int i = 0; i < l.size(); i++)
+		{
+			listCopy.add(l.get(i));
+		}
+		return listCopy;
+	}
+	
+	private static String arrPrint(int[] arr)
+	{
+		String result = "[ ";
+		for (int i = 0; i < arr.length; i++)
+		{
+			result += arr[i] + ", ";
+		}
+		result = result.substring(0, result.length() - 2);
+		return result + " ]";
+	}
 
 	public static Candidate instantRunoff(List<Voter> vList, List<Candidate> cList)
 	{
 		List<List<Candidate>> rankings = new ArrayList<List<Candidate>>();
 		for (Voter v: vList)
 		{
-			List<Candidate> cListCopy = new ArrayList<Candidate>();
-			for (int i = 0; i < cList.size(); i++)
-			{
-				cListCopy.add(cList.get(i));
-			}
-			rankings.add(generateRanking(v, cListCopy));
+			rankings.add(generateRanking(v, copyList(cList)));
 		}
 		int[] votes = new int[cList.size()];
-		for (List<Candidate> ranking: rankings)
-		{
-			votes[cList.indexOf(ranking.get(0))] += 1;
-		}
-		while (votes[bigIndex(votes)] <= vList.size() / 2)
-		{
-			//runoff
-			int smallIndex = smallIndex(votes);
-			Candidate leastFav = cList.get(smallIndex);
-			votes[smallIndex] = -1;
-			for (List<Candidate> ranking: rankings)
+		do {
+			for (int i = 0; i < rankings.size(); i++)
 			{
-				if (ranking.get(0).equals(leastFav))
+				//their preferred candidate
+				int index = 0;
+				for (int j = 0; j < rankings.get(i).size(); j++)
 				{
-					votes[cList.indexOf(ranking.get(1))]++;
+					Candidate cur = rankings.get(i).get(j);
+					if (votes[cList.indexOf(cur)] != -1)
+					{
+						index = j;
+						break;
+					}
+				}
+				Candidate c = rankings.get(i).get(index);
+				votes[cList.indexOf(c)]++;
+			}
+			System.out.println(arrPrint(votes));
+			if (votes[bigIndex(votes)] > (double)rankings.size() * 0.5)
+			{
+				break;
+			}
+			votes[smallIndex(votes)] = -1;
+			for (int i = 0; i < votes.length; i++)
+			{
+				if (votes[i] != -1)
+				{
+					votes[i] = 0;
 				}
 			}
-		}
-		int bigIndex = bigIndex(votes);
-		for (int i = 0; i < cList.size(); i++)
-		{
-			cList.get(i).setVotes(votes[i]);
-		}
-		return cList.get(bigIndex);
+		} while(true);
+		return cList.get(bigIndex(votes));
 	}
 	
 	public static Candidate condorcet(List<Voter> vList, List<Candidate> cList)
@@ -204,12 +238,7 @@ public class Voting {
 		List<List<Candidate>> rankings = new ArrayList<List<Candidate>>();
 		for (Voter v: vList)
 		{
-			List<Candidate> cListCopy = new ArrayList<Candidate>();
-			for (int i = 0; i < cList.size(); i++)
-			{
-				cListCopy.add(cList.get(i));
-			}
-			rankings.add(generateRanking(v, cListCopy));
+			rankings.add(generateRanking(v, copyList(cList)));
 		}
 		int[] wins = new int[cList.size()];
 		for (int i = 0; i < cList.size() - 1; i++)
@@ -232,16 +261,12 @@ public class Voting {
 				if (firstAbove > secondAbove)
 				{
 					wins[i]++;
-					System.out.println("Voters prefer " + cList.get(i) + " over " + cList.get(j) + ".");
+					System.out.println("Voters prefer " + cList.get(j) + " over " + cList.get(i) + ".");
 				}
 				else if (secondAbove > firstAbove)
 				{
 					wins[j]++;
 					System.out.println("Voters prefer " + cList.get(j) + " over " + cList.get(i) + ".");
-				}
-				else
-				{
-					System.out.println("Voters hold " + cList.get(j) + " and " + cList.get(i) + " equally.");
 				}
 			}
 		}

@@ -6,40 +6,27 @@ import java.util.List;
 public class Main {
 
 	public static void main(String[] args) {
-		
-		//List<Voter> voters = Voting.generateVoterCircles(1000, 5, 2, 0, 0);
-		//System.out.println(Voting.graphVoters(voters, 1));
-		//System.out.println(voters.size());
-
 		List<Voter> voters = new ArrayList<Voter>();
-		for (int i = 0; i < 1000; i++)
+		voters = Voting.generateRandomVoters(10000);
+		
+		List<Candidate> candidates = new ArrayList<Candidate>();
+		candidates = Voting.generateRandomCandidates(5);
+		System.out.println("The candidates:");
+		for (Candidate c: candidates)
 		{
-			voters.add(new Voter(0, 0));
+			System.out.println(c + ": Economic Platform: " + c.getEconomicPlatform() + ", Social Platform: " + c.getSocialPlatform());
 		}
+		System.out.println();
 		
-		ArrayList<Candidate> candidates = new ArrayList<Candidate>();
-		candidates.add(new Candidate("Left leaning candidate", -5, -5));
-		candidates.add(new Candidate("Right leaning candidate", 5, 5));
-		candidates.add(new Candidate("Spoiler candidate", 5.01, 4.99));
-		candidates.add(new Candidate("Extremist candidate", 10, 10));
-		candidates.add(new Candidate("Libertarian candidate", 5, -5));
-		
-		System.out.println("Instant Runoff Voting");
+		System.out.println();
+		System.out.println("Instant Runoff voting:");
 		System.out.println(Voting.instantRunoff(voters, candidates) + " wins.");
 		System.out.println();
-		for (int i = 0; i < candidates.size(); i++)
-		{
-			System.out.println(candidates.get(i) + " earned " + candidates.get(i).getNumVotes() + " votes.");
-		}
 
 		System.out.println();
 		System.out.println("Condorcet voting:");
 		System.out.println(Voting.condorcet(voters, candidates) + " wins.");
 		System.out.println();
-		for (int i = 0; i < candidates.size(); i++)
-		{
-			System.out.println(candidates.get(i) + " earned " + candidates.get(i).getNumVotes() + " votes.");
-		}
 		
 		System.out.println();
 		System.out.println("FPTP voting:");
@@ -60,6 +47,7 @@ public class Main {
 		}
 		
 		System.out.println();
+		System.out.println("First voter:");
 		System.out.println(voters.get(0));
 		System.out.println("First voter's ranking is:");
 		List<Candidate> ranking = Voting.generateRanking(voters.get(0), candidates);
