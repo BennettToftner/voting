@@ -1,0 +1,103 @@
+             |           
+             |           
+             |           
+             |           
+             |           
+             |           
+             |           
+             |           
+             |           
+             |           
+      █  █   | █  █      
+      ████   | ████      
+     ███████ |████████   
+------████---+-████------
+      █  ██  | █  ██     
+             |           
+             |           
+             |           
+             |           
+             |           
+             |           
+             |           
+             |           
+             |           
+             |           
+
+The candidates:
+Candidate 1: Economic Platform: 3.5877779164210004, Social Platform: 2.105115143252176
+Candidate 2: Economic Platform: -2.1697800734285817, Social Platform: -6.640558448863185
+Candidate 3: Economic Platform: -8.344688433221608, Social Platform: 7.647283468082261
+Candidate 4: Economic Platform: -8.955589670211426, Social Platform: 9.649064529969142
+Candidate 5: Economic Platform: -4.237477461622998, Social Platform: 6.686814573237513
+Centrist: Economic Platform: 0.0, Social Platform: 0.0
+
+
+Positive-Negative voting:
+Candidate 1 wins.
+
+Candidate 1 earned 235 votes.
+Candidate 2 earned -1 votes.
+Candidate 3 earned 1 votes.
+Candidate 4 earned -480 votes.
+Candidate 5 earned 13 votes.
+Centrist earned 232 votes.
+
+Instant Runoff voting:
+[ 247, 5, 1, 0, 13, 232 ]
+[ 247, 5, 1, -1, 13, 232 ]
+[ 247, 5, -1, -1, 14, 232 ]
+[ 247, -1, -1, -1, 14, 237 ]
+[ 247, -1, -1, -1, -1, 251 ]
+Centrist wins.
+
+
+Condorcet voting:
+Voters prefer Candidate 1 over Candidate 2.
+Voters prefer Candidate 1 over Candidate 3.
+Voters prefer Candidate 1 over Candidate 4.
+Voters prefer Candidate 1 over Candidate 5.
+Voters prefer Centrist over Candidate 1.
+Voters prefer Candidate 2 over Candidate 3.
+Voters prefer Candidate 2 over Candidate 4.
+Voters prefer Candidate 2 over Candidate 5.
+Voters prefer Centrist over Candidate 2.
+Voters prefer Candidate 3 over Candidate 4.
+Voters prefer Candidate 5 over Candidate 3.
+Voters prefer Centrist over Candidate 3.
+Voters prefer Candidate 5 over Candidate 4.
+Voters prefer Centrist over Candidate 4.
+Voters prefer Centrist over Candidate 5.
+Centrist wins.
+
+
+FPTP voting:
+Candidate 1 wins.
+
+Candidate 1 earned 247 votes.
+Candidate 2 earned 5 votes.
+Candidate 3 earned 1 votes.
+Candidate 4 earned 0 votes.
+Candidate 5 earned 13 votes.
+Centrist earned 232 votes.
+
+Approval voting:
+Centrist wins.
+
+Candidate 1 earned 263 votes.
+Candidate 2 earned 141 votes.
+Candidate 3 earned 50 votes.
+Candidate 4 earned 1 votes.
+Candidate 5 earned 184 votes.
+Centrist earned 494 votes.
+
+First voter:
+Economic Beliefs: -4.0
+Social Beliefs: 0.0
+First voter's ranking is:
+Centrist
+Candidate 5
+Candidate 2
+Candidate 1
+Candidate 3
+Candidate 4
