@@ -20,6 +20,21 @@ public class Voting {
 		}
 		return index;
 	}
+
+	private static int smallIndex(int[] arr)
+	{
+		int index = 0;
+		int smallest = Integer.MAX_VALUE;
+		for (int i = 0; i < arr.length; i++)
+		{
+			if (arr[i] < smallest && arr[i] >= 0)
+			{
+				smallest = arr[i];
+				index = i;
+			}
+		}
+		return index;
+	}
 	
 	//move to voter class?
 	public static Candidate favoriteCandidate(Voter v, List<Candidate> cList)
@@ -94,6 +109,16 @@ public class Voting {
 		return voters;
 	}
 	
+	public static List<Candidate> generateRandomCandidates(int numCands)
+	{
+		ArrayList<Candidate> cands = new ArrayList<Candidate>();
+		for (int i = 0; i < numCands; i++)
+		{
+			cands.add(new Candidate("Candidate " + (i + 1)));
+		}
+		return cands;
+	}
+	
 	/**
 	 * Generates concentric circles of voters decreasing in amount as the circles expand.
 	 * Results in a square of voters around the edge if voters go above 10 or below -10 in economic or social beliefs.
@@ -145,17 +170,75 @@ public class Voting {
 		return ranking;
 	}
 	
+	private static <T> List<T> copyList(List<T> l)
+	{
+		List<T> listCopy = new ArrayList<T>();
+		for (int i = 0; i < l.size(); i++)
+		{
+			listCopy.add(l.get(i));
+		}
+		return listCopy;
+	}
+	
+	private static String arrPrint(int[] arr)
+	{
+		String result = "[ ";
+		for (int i = 0; i < arr.length; i++)
+		{
+			result += arr[i] + ", ";
+		}
+		result = result.substring(0, result.length() - 2);
+		return result + " ]";
+	}
+
+	public static Candidate instantRunoff(List<Voter> vList, List<Candidate> cList)
+	{
+		List<List<Candidate>> rankings = new ArrayList<List<Candidate>>();
+		for (Voter v: vList)
+		{
+			rankings.add(generateRanking(v, copyList(cList)));
+		}
+		int[] votes = new int[cList.size()];
+		do {
+			for (int i = 0; i < rankings.size(); i++)
+			{
+				//their preferred candidate
+				int index = 0;
+				for (int j = 0; j < rankings.get(i).size(); j++)
+				{
+					Candidate cur = rankings.get(i).get(j);
+					if (votes[cList.indexOf(cur)] != -1)
+					{
+						index = j;
+						break;
+					}
+				}
+				Candidate c = rankings.get(i).get(index);
+				votes[cList.indexOf(c)]++;
+			}
+			System.out.println(arrPrint(votes));
+			if (votes[bigIndex(votes)] > (double)rankings.size() * 0.5)
+			{
+				break;
+			}
+			votes[smallIndex(votes)] = -1;
+			for (int i = 0; i < votes.length; i++)
+			{
+				if (votes[i] != -1)
+				{
+					votes[i] = 0;
+				}
+			}
+		} while(true);
+		return cList.get(bigIndex(votes));
+	}
+	
 	public static Candidate condorcet(List<Voter> vList, List<Candidate> cList)
 	{
 		List<List<Candidate>> rankings = new ArrayList<List<Candidate>>();
 		for (Voter v: vList)
 		{
-			List<Candidate> cListCopy = new ArrayList<Candidate>();
-			for (int i = 0; i < cList.size(); i++)
-			{
-				cListCopy.add(cList.get(i));
-			}
-			rankings.add(generateRanking(v, cListCopy));
+			rankings.add(generateRanking(v, copyList(cList)));
 		}
 		int[] wins = new int[cList.size()];
 		for (int i = 0; i < cList.size() - 1; i++)
@@ -178,16 +261,12 @@ public class Voting {
 				if (firstAbove > secondAbove)
 				{
 					wins[i]++;
-					System.out.println("Voters prefer " + cList.get(i) + " over " + cList.get(j) + ".");
+					System.out.println("Voters prefer " + cList.get(j) + " over " + cList.get(i) + ".");
 				}
 				else if (secondAbove > firstAbove)
 				{
 					wins[j]++;
 					System.out.println("Voters prefer " + cList.get(j) + " over " + cList.get(i) + ".");
-				}
-				else
-				{
-					System.out.println("Voters hold " + cList.get(j) + " and " + cList.get(i) + " equally.");
 				}
 			}
 		}

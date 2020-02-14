@@ -34,6 +34,16 @@ public class Candidate {
 		}
 		votes = 0;
 	}
+
+	public boolean equals(Candidate other)
+	{
+		return this.name.equals(other.name) && this.socialPlatform == other.socialPlatform && this.economicPlatform == other.economicPlatform;
+	}
+
+	public void addVotes(int toAdd)
+	{
+		votes += toAdd;
+	}
 	
 	public int getNumVotes()
 	{
