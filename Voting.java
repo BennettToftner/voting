@@ -190,6 +190,29 @@ public class Voting {
 		result = result.substring(0, result.length() - 2);
 		return result + " ]";
 	}
+	
+	public static Candidate positiveNegative(List<Voter> vList, List<Candidate> cList)
+	{
+		List<List<Candidate>> rankings = new ArrayList<List<Candidate>>();
+		for (Voter v: vList)
+		{
+			rankings.add(generateRanking(v, copyList(cList)));
+		}
+		int[] votes = new int[cList.size()];
+		for (int i = 0; i < rankings.size(); i++)
+		{
+			Candidate pos = rankings.get(i).get(0);
+			Candidate neg = rankings.get(i).get(rankings.get(i).size() - 1);
+			votes[cList.indexOf(pos)]++;
+			votes[cList.indexOf(neg)]--;
+		}
+		int bigIndex = bigIndex(votes);
+		for (int i = 0; i < cList.size(); i++)
+		{
+			cList.get(i).setVotes(votes[i]);
+		}
+		return cList.get(bigIndex);
+	}
 
 	public static Candidate instantRunoff(List<Voter> vList, List<Candidate> cList)
 	{
@@ -261,7 +284,7 @@ public class Voting {
 				if (firstAbove > secondAbove)
 				{
 					wins[i]++;
-					System.out.println("Voters prefer " + cList.get(j) + " over " + cList.get(i) + ".");
+					System.out.println("Voters prefer " + cList.get(i) + " over " + cList.get(j) + ".");
 				}
 				else if (secondAbove > firstAbove)
 				{
